@@ -85,19 +85,32 @@
 					new THREE.BoxGeometry( 6, 6, 6, 8, 8, 8 ),
 					new THREE.MeshBasicMaterial( { color: 0x404040, wireframe: true } )
 				);
+room.receiveShadow = true;
+
 				scene.add( room );
 
 				scene.add( new THREE.HemisphereLight( 0x606060, 0x404040 ) );
 
-				var light = new THREE.DirectionalLight( 0xffffff );
+//				var light = new THREE.DirectionalLight( 0xffffff );
+//				light.position.set( 1, 1, 1 ).normalize();
+//				scene.add( light );
+
+var light = new THREE.PointLight( 0xffffff, 1, 100 );
+//light.position.set( 0, 12, 0 );
 				light.position.set( 1, 1, 1 ).normalize();
-				scene.add( light );
+light.castShadow = true;
+light.shadow.mapSize.width = 1024;
+light.shadow.mapSize.height = 1024;
+
+light.shadow.camera.left = 500
+scene.add( light );
 
 				var geometry = new THREE.BoxGeometry( 0.15, 0.15, 0.15 );
 
 				for ( var i = 0; i < 200; i ++ ) {
 
 					var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
+    object.castShadow = true;
 
 					object.position.x = Math.random() * 4 - 2;
 					object.position.y = Math.random() * 4 - 2;
