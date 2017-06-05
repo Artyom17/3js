@@ -39,10 +39,10 @@
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
 
-var renderer = new THREE.WebGLRenderer({preserveDrawingBuffer:false});
-renderer.setClearColor(0xFF0000);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+var renderer = new THREE.WebGLRenderer({preserveDrawingBuffer:false, antialias:true});
+renderer.setClearColor( 0xFF0000 );
+/*renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;         */
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
@@ -56,11 +56,11 @@ document.body.appendChild( renderer.domElement );
 
 var light = new THREE.PointLight( 0xffffff, 1, 100 );
 light.position.set( 0, 12, 0 );
-light.castShadow = true;
-light.shadow.mapSize.width = 1024;
-light.shadow.mapSize.height = 1024;
+//light.castShadow = true;
+//light.shadow.mapSize.width = 1024;
+//light.shadow.mapSize.height = 1024;
   
-light.shadow.camera.left = 500
+//light.shadow.camera.left = 500
 scene.add( light );
 
 var ambientLight = new THREE.AmbientLight( 0x151515 ); // soft white light
@@ -70,19 +70,19 @@ scene.add( ambientLight );
     var boxGeometry = new THREE.BoxGeometry( 1, 1, 1 );
     var boxMaterial = new THREE.MeshPhongMaterial( { color: 0xdddddd, specular: 0x999999, shininess: 15, shading: THREE.FlatShading } );
     var box = new THREE.Mesh( boxGeometry, boxMaterial );
-    box.castShadow = true;
+//    box.castShadow = true;
     scene.add( box );
 
 var planeGeometry = new THREE.PlaneGeometry( 20, 20, 32, 32 );
 var planeMaterial = new THREE.MeshPhongMaterial( { color: 0x00dddd, specular: 0x009900, shininess: 10, shading: THREE.FlatShading } )
 var plane = new THREE.Mesh( planeGeometry, planeMaterial );
-plane.receiveShadow = true;
+//plane.receiveShadow = true;
 scene.add( plane );
 plane.position.y = -2;
 plane.rotation.x = -Math.PI/2;
 
 
-camera.position.z = 5;
+camera.position.z = 10;
 camera.position.y = 2;
 camera.lookAt(box.position);
 
@@ -118,13 +118,23 @@ camera.lookAt(box.position);
 
 function render() {
 //  requestAnimationFrame( render );
-
+//  renderer.setScissorTest(false);
+//  renderer.setViewport(0,0,renderer.width, renderer.height);
+//  renderer.clear(true,true,true);
   box.rotation.x += 0.02;
   box.rotation.y += 0.02;
 
-//  renderer.render(scene, camera);
+  camera.position.x = 0;
+  camera.position.z = 0;
+  camera.position.y = 0;
+
   controls.update();
-  effect.render( scene, camera );
+
+  camera.position.x += 0;
+  camera.position.z += 10;
+  camera.position.y += 2;
+
+  effect.render( scene, camera , null, true);
 };
 
 render();
