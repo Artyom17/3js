@@ -288,19 +288,24 @@ THREE.VREffect = function ( renderer, onError ) {
 				height: Math.round( size.height * rightBounds[ 3 ] )
 			};
 
+            renderer.setViewport( 0, 0, size.width, size.height ); //!AB: for clear
 			if ( renderTarget ) {
 
 				renderer.setRenderTarget( renderTarget );
+                renderer.setScissorTest( false ); //!AB: for clear
+                renderer.clear();
 				renderTarget.scissorTest = true;
 
 			} else {
 
 				renderer.setRenderTarget( null );
+                renderer.setScissorTest( false ); //!AB: for clear
+                renderer.clear();
 				renderer.setScissorTest( true );
 
 			}
 
-			if ( renderer.autoClear || forceClear ) renderer.clear();
+			//!AB: if ( renderer.autoClear || forceClear ) renderer.clear();
 
 			if ( camera.parent === null ) camera.updateMatrixWorld();
 
