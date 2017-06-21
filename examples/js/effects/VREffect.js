@@ -104,6 +104,18 @@ THREE.VREffect = function ( renderer, onError ) {
 	var defaultLeftBounds = [ 0.0, 0.0, 0.5, 1.0 ];
 	var defaultRightBounds = [ 0.5, 0.0, 0.5, 1.0 ];
 
+      function onVRRequestPresent () {
+        console.log("onVRRequestPresent begin");
+        // This can only be called in response to a user gesture.
+        vrDisplay.requestPresent([{ source: canvas }]).then(function () {
+          // Nothing to do because we're handling things in onVRPresentChange.
+        }, function (err) {
+          var errMsg = "requestPresent failed.";
+          console.log("onVRRequestPresent: errMsg: " + errMsg);
+        });
+        console.log("onVRRequestPresent end");
+      }
+
 	function onVRDisplayPresentChange() {
 
 		var wasPresenting = scope.isPresenting;
@@ -134,6 +146,7 @@ THREE.VREffect = function ( renderer, onError ) {
 
 	}
 
+    window.addEventListener('vrdisplayactivate', onVRRequestPresent, false);
 	window.addEventListener( 'vrdisplaypresentchange', onVRDisplayPresentChange, false );
 
 	this.setFullScreen = function ( boolean ) {
